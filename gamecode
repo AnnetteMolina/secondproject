@@ -1,5 +1,6 @@
 import pygame
 import sys
+import speech_recognition as sr
 
 pygame.init()
 
@@ -14,6 +15,10 @@ font = pygame.font.SysFont(None, 24)
 WHITE = (255, 255, 255)
 GRAY = (200, 200, 200)
 BLACK = (0, 0, 0)
+
+# Load microphone icon
+mic_icon = pygame.image.load("mic_icon.png")
+mic_icon = pygame.transform.scale(mic_icon, (30, 30))
 
 # Button setup: (label, rectangle)
 difficulty_buttons = [
@@ -77,8 +82,6 @@ My pet {0} is the most {1} creature I’ve ever met.
 
     # You can add more stories in the same format here
 }
-
-
 def create_option_buttons(option_texts):
     buttons = []
     y_start = 40
@@ -103,12 +106,23 @@ class InputBox:  # this helps set it up so we dont need to enter each time
         self.text = ''
         self.prompt = prompt
         self.active = False
+        self.voice_button_rect = pygame.Rect(x + w + 10, y, 40, h)
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
-            self.active = self.rect.collidepoint(event.pos)
-            self.color = BLACK if self.active else GRAY
-        if event.type == pygame.KEYDOWN and self.active:
+            if self.rect.collidepoint(event.pos):
+                self.active = True
+                self.color = BLACK
+            else:
+                self.active = False
+                self.color = GRAY
+    
+            if self.voice_button_rect.collidepoint(event.pos):
+                self.text = InputBox.listen_for_input() or ""
+                self.active = False
+                self.color = GRAY
+
+        elif event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_BACKSPACE:
                 self.text = self.text[:-1]
             elif event.key == pygame.K_RETURN:
@@ -124,6 +138,26 @@ class InputBox:  # this helps set it up so we dont need to enter each time
         screen.blit(prompt_surface, (self.rect.x, self.rect.y - 25))
         screen.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
 
+        pygame.draw.rect(screen, GRAY, self.voice_button_rect)
+        screen.blit(mic_icon, self.voice_button_rect.topleft)
+        
+    @staticmethod
+    def listen_for_input():
+        recognizer = sr.Recognizer()
+        with sr.Microphone() as source:
+            print("Listening for input...")
+            recognizer.adjust_for_ambient_noise(source)
+            audio = recognizer.listen(source)
+        try:
+            print("Recognizing...")
+            text = recognizer.recognize_google(audio)
+            print(f"You said: {text}")
+            return text
+        except sr.UnknownValueError:
+            print("Sorry, I could not understand the audio.")
+        except sr.RequestError:
+            print("Could not request results from Google Speech Recognition service.")
+            return None
 
 def main():
     final_story = ""

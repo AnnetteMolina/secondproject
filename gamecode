@@ -5,11 +5,11 @@ import speech_recognition as sr
 pygame.init()
 
 # Display setup (edit later)
-screen = pygame.display.set_mode((900, 1700))
+screen = pygame.display.set_mode((1300, 2500))
 pygame.display.set_caption("Select Difficulty")
 
 # Font setup (edit later)
-font = pygame.font.SysFont(None, 24)
+font = pygame.font.SysFont(None, 20)
 
 # Colors (edit later)
 WHITE = (255, 255, 255)
@@ -38,7 +38,7 @@ options = {
         "Animal Farm", "The Art Offender"
     ],
     "Hard": [
-        "Interstellar", "The Upside Down", "The Adventurer’s Deception",
+        "Planet Wobble", "The Upside Down", "The Adventurer’s Deception",
         "Planet Strange", "A Son’s Journey"
     ]
 }
@@ -80,8 +80,500 @@ My pet {0} is the most {1} creature I’ve ever met.
 """
     },
 
-    # You can add more stories in the same format here
+  "Adventure Time": {
+        "prompts": [
+            "Enter an adjective:", "Enter another adjective:", "Enter a place:",
+            "Enter a third adjective:", "Enter a verb:", "Enter a past-tense verb:",
+            "Enter an adverb:", "Enter a type of food:", "Enter a fourth adjective:",
+            "Enter a fifth adjective:", "Enter another verb:", "Enter a second adverb:"
+        ],
+        "template": """
+In the morning, it was {0} outside. The {1} car took off and drove down the road.
+    I decided I wanted to go to the {2}. While I was there, it got too {3}.
+    I was immediately frightened, so I started to {4}. I {5} out of there {6}.
+    I ran all of the way home. Since I was running so much, I got hungry.
+    I decided that I wanted to eat {7}. When I took my first bite, I decided it was too {8}.
+    I immediately felt {9}, so I decided to {10}. My day went {11}!
+"""
+    },
+    "My Inspritation": {
+    "prompts": [
+        "Enter an adjective:",
+        "Enter a verb:",
+        "Enter another adjective:",
+        "Enter a career:",
+        "Enter another verb:",
+        "Enter a name:",
+        "Enter a pronoun (he/she/they):",
+        "Enter a place:",
+        "Enter a past-tense verb:",
+        "Enter a noun:"
+    ],
+    "template": """
+When I was younger, I experienced a very {0} event. I saw my mother {1}!
+Though this may seem mundane to most, I couldn’t believe my eyes. See, I had never seen anyone {1}.
+I felt {2}. I decided right then that my life would change forever.
+I decided to pursue {3}. My mom asked me what was wrong, but I just told her I needed to {4}.
+I went to my friend {5}’s house, when I told {6} that we needed to go to {7}.
+{6} agreed, and we {8} to the {7}.
+Why did we go there, do you ask? Well, the answer is obvious. We needed to find {9}. Duh!
+"""
+    },
+    "A Game of Thrones": {
+        "prompts": [
+        "Enter an adjective:",
+        "Enter a noun:",
+        "Enter a plural noun:",
+        "Enter a name:",
+        "Enter another adjective:",
+        "Enter a pronoun (he/she/they):",
+        "Enter another plural noun:",
+        "Enter a third plural noun:",
+        "Enter a second name:",
+        "Enter a third adjective:"
+    ],
+    "template": """
+Once upon a time, a(n) {0} {1} ruled the kingdom of {2}.
+{1} was given a special name, {3}. {3} was a(n) {4} ruler.
+{5} quickly became ruthless, executing anyone who threatened {5} rule.
+After many years, the kingdom of {2} became fed up with {3}’s cruelty, and decided to overthrow their ruler.
+The kingdom went into war, with the {6} fighting the {7}.
+In the end, {6} was victorious, with the new ruler being a(n) {4} person.
+This ruler was given the title of {8}, the {9}.
+The kingdom remained prosperous for years to come!
+"""
+    },
+    "Camp Nightmare": {
+    "prompts": [
+        "Enter a place:",
+        "Enter a smell:",
+        "Enter a plural noun:",
+        "Enter a type of food:",
+        "Enter a noun:",
+        "Enter another plural noun:",
+        "Enter an exclamation:",
+        "Enter an adjective:",
+        "Enter a third plural noun:",
+        "Enter a second adjective:",
+        "Enter a person's name:",
+        "Enter an animal:",
+        "Enter a sound:",
+        "Enter a structure (e.g. cabin, tent):",
+        "Enter a type of liquid:",
+        "Enter a clothing item:",
+        "Enter a third adjective:",
+        "Enter an insect:"
+    ],
+    "template": """
+I was excited for camp at {0}, but everything went wrong the second we arrived. My tent was full of holes and smelled like {1}.
+During the first night, I found {2} crawling all over my sleeping bag, and a raccoon stole my {3}.
+On the hike the next morning, I tripped on a {4}, fell into a bush of {5}, and had to wear a leaf as a bandage.
+"{6}!" I yelled, sliding down a muddy hill straight into the lake. Everyone laughed, but at least the water washed off the {7} goo from my legs.
+
+Later that evening, we roasted {8} over the campfire and told scary stories.
+One was about a {9} ghost named {10} who haunted abandoned cabins and screamed like a {11}.
+Just as the story ended, we heard a {12} in the woods. Everyone panicked and ran into the {13} at once, knocking over a pot of {14}.
+I accidentally put on someone else's {15} and wore it backwards all night.
+Camp was definitely {16}, but I made new friends — and a lasting fear of {17}.
+"""
+},
+    "Science Fair ": {
+    "prompts": [
+        "Enter a school name:",
+        "Enter a verb:",
+        "Enter another verb:",
+        "Enter a plural noun:",
+        "Enter an electronic device:",
+        "Enter a person's name:",
+        "Enter a color:",
+        "Enter a type of food:",
+        "Enter a noun:",
+        "Enter an adjective:",
+        "Enter a type of drink:",
+        "Enter a past-tense verb:",
+        "Enter a teacher's name:",
+        "Enter another past-tense verb:",
+        "Enter a second adjective:",
+        "Enter an animal:",
+        "Enter a substance:",
+        "Enter another noun:",
+        "Enter a dessert:",
+        "Enter a type of vehicle:"
+    ],
+    "template": """
+This year’s science fair at {0} was the weirdest one yet.
+I built a robot that could {1} and {2} using just {3} and an old {4} I found in my garage.
+My best friend {5} made slime that turned {6} and made fart noises when stretched.
+Another student used {7} to create a functioning {8}, which exploded halfway through judging.
+The judges looked {9}, and one of them nearly spilled their {10} in shock.
+
+When my turn came, I got so nervous I {11} and dropped my robot on {12}’s shoes.
+Everyone gasped, but then she {13} and said it was the most {14} thing she’d ever seen.
+To top it off, a group of students did a live demo with {15}s and a makeshift volcano powered by {16}.
+I ended up winning third place and a trophy shaped like a {17}.
+We all celebrated with {18}, and I promised myself I’d go even bigger next year — maybe with lasers and a flying {19}.
+"""
+},
+    "The Captain’s Journey": {
+        "prompts": [
+        "Enter an adjective:",
+        "Enter a name:",
+        "Enter a possessive pronoun (e.g., his, her, their):",
+        "Enter a noun:",
+        "Enter another adjective:",
+        "Enter an animal:",
+        "Enter a pet name:",
+        "Enter a mode of transportation:",
+        "Enter a funny name:",
+        "Enter a plural noun:",
+        "Enter a mythical creature:",
+        "Enter another adjective:",
+        "Enter a food:",
+        "Enter an object:",
+        "Enter a celebrity:",
+        "Enter a pronoun:"
+    ],
+    "template": """
+It was a(n) {0} morning when Captain {1} woke up in {2} room with one goal: to find the legendary {3}. 
+Armed with only a(n) {4} map and a loyal {5} named {6}, the captain set sail on their trusty {7} named The {8}. 
+Smelling something in the air, the captain realized a storm was brewing! Taking control of the {7}, Captain {1} knew {15} had to focus.
+
+Taking perfect control of the ship, the captain successfully maneuvered through the storm, powering ahead. 
+After battling a wave of {9}, Captain {1} finally arrived at the mysterious Island of {10}s. 
+There, hidden beneath a(n) {11} rock shaped like a {12}, was the treasure: a sparkling, ancient {13}.
+
+With a triumphant laugh, the captain raised the treasure high and shouted, “Arrrrr, by the beard of {14}!” 
+Suddenly, a pelican swooped down and grabbed the {13}. “Nooooooo, me booty!” yelled the captain. 
+Captain {1} tried to run after it, but to no avail. To make matters worse, a huge wave swept away the {7}. Better luck next time!
+"""
+},
+    "Animal Farm": {
+    "prompts": [
+        "Enter an adjective:",
+        "Enter an animal:",
+        "Enter a family member:",
+        "Enter a plural noun:",
+        "Enter another adjective:",
+        "Enter a noun:",
+        "Enter a silly object:",
+        "Enter a liquid:",
+        "Enter another animal:"
+    ],
+    "template": """
+Yesterday was the most {0} day of my life. I woke up to the sound of a(n) {1} knocking at my door. 
+Thinking it was my {2}, I got up and opened the door to find the {1} doing flips across my hallway. 
+At first, I thought I was dreaming, so I crawled back into bed and tried to fall asleep. However, a bright light came from outside. 
+I looked out the window and saw a group of {3} having a picnic on my front lawn!
+
+Not knowing what else to do, I decided to join them, so I put on my favorite {4} hat and grabbed a {5} from the kitchen. 
+As I stepped outside, I accidentally tripped over a(n) {6} and landed face-first in a puddle of {7}. 
+The {1}s came out of nowhere and started to laugh at me.
+
+Feeling offended, I huffed and went back inside, where I found a(n) {8} sleeping in my bed! I sighed and gave up, crawling in next to it. 
+I grabbed my teddy bear and fell back asleep. After I woke up, I realized I was sleeping alone again. 
+I looked out my window, and all of the animals were gone. However, they left behind their mess, which my mother is blaming me for. 
+Who would even believe me if I told them the truth!
+"""
+},
+    "The Art Offender": {
+         "prompts": [
+        "Enter a name:",
+        "Enter a city name:",
+        "Enter another name:",
+        "Enter an animal:",
+        "Enter a time:",
+        "Enter a food:",
+        "Enter a verb:",
+        "Enter an adjective:",
+        "Enter another adjective:",
+        "Enter another animal:",
+        "Enter another verb:"
+    ],
+    "template": """
+It all started when my friend, {0} suggested we go to {1}. Thinking it could be fun, I agreed. Big mistake! 
+On the plane, we met a funny looking guy, who introduced himself by the name of {2}. He sat in between us, and he smelled like a(n) {3}. 
+When we finally landed, we scurried off to our hotel. The lady at the front desk told us that she could not find our reservation. 
+Though she could get us a room, we would have to wait until {4}. Sighing, we left our luggage and decided to go visit a museum.
+
+At the museum, we were surprised to find that almost nobody was around. Getting some {5} at the cafe, we sat down and decided to eat. 
+After finishing, my friend decided to {6} up the stairs, and I followed. Looking around at a room full of delicate material, I became {7}. 
+My friend was such a clumsy guy, and I was too {8} to behave normally.
+
+Looking at a nearby painting, I was shocked to see a depiction of a person with the head of a(n) {9}. 
+I was making a joke to my friend, when, all of a sudden, the painting started to speak! The creature swore revenge on us for making fun of it. 
+We decided we were just seeing things because we were tired. However, on the street next to the hotel, we ran into a person dressed like the creature from the painting! 
+Looking at each other, we decided to {10} in the opposite direction. Seeking refuge in a nearby store, we were greeted with a rack of postcards. 
+I looked through them, some depicting the nearby city of {1}. To my surprise, I found a postcard with another depiction of the creature! 
+Long story short, I have been seeing this creature everywhere ever since. A piece of advice: never make fun of art, ever.
+"""
+},
+    "Planet Wobble": {
+        "prompts": [
+        "Enter a person's name:",
+        "Enter an adjective:",
+        "Enter a plural noun:",
+        "Enter a planet name:",
+        "Enter a job:",
+        "Enter an alien's name:",
+        "Enter a color:",
+        "Enter an animal:",
+        "Enter another plural noun:",
+        "Enter a liquid:",
+        "Enter another adjective:",
+        "Enter a noun:",
+        "Enter another adjective:",
+        "Enter a type of vehicle:",
+        "Enter a verb ending in -ing:",
+        "Enter a substance:",
+        "Enter another plural noun:",
+        "Enter an exclamation:",
+        "Enter a musical instrument:",
+        "Enter a material:",
+        "Enter a magical object:",
+        "Enter another plural noun:",
+        "Enter a number:",
+        "Enter a unit of time (plural):",
+        "Enter an object:",
+        "Enter a type of bird:",
+        "Enter another adjective:",
+        "Enter a verb:",
+        "Enter a noun:",
+        "Enter a dessert:",
+        "Enter a place:",
+        "Enter a beverage:"
+    ],
+    "template": """
+Captain {0}, reporting for interstellar exploration! Today, my crew and I are launching aboard the *{1} Falcon*, 
+a ship equipped with hyper-thrusters, a snack bar, and exactly 742 {2}. Our destination? 
+The mysterious and rarely visited planet {3}. My team includes a fearless {4}, a highly intelligent alien named 
+{5} with {6} skin, and a talking {7} who once flew through an asteroid field blindfolded. 
+We packed essentials: space suits, emergency {8}, and a thermos of {9} — just in case.
+
+The journey was {10}. First, we had to navigate through a wormhole shaped like a {11}, 
+then escape a fleet of {12} space pirates in {13}s. Upon landing, gravity felt like {14} through {15}, 
+and the trees resembled upside-down {16}. As we explored, we encountered glowing creatures chanting “{17}!” 
+while bouncing on trampoline-like soil. {5} managed to communicate with them using a combination of 
+{18} and interpretive dance. They invited us to their floating city made of {19}, 
+where we were shown the {20}, capable of generating infinite {21}.
+
+We stayed on Planet Wobble for {22} {23}, learning about their customs, including a bizarre sport involving 
+{24} and singing {25}s. Before leaving, they gifted us a {26} device that could {27} small objects into snacks. 
+When we returned to Earth, no one believed our stories — until we showed them the video of {7} winning a dance battle with a blob. 
+NASA awarded us medals shaped like {28}, and the President declared it "Galactic Explorer Day." Now I spend my weekends signing 
+autographs and eating space-grade {29} with {5}, planning our next voyage to {30}, the moon where it rains {31}.
+"""
+},
+    "The Upside Down": {
+         "prompts": [
+        "Enter a plural noun:",
+        "Enter a noun:",
+        "Enter a time:",
+        "Enter a color:",
+        "Enter a direction:",
+        "Enter a family member:",
+        "Enter a dessert:",
+        "Enter an exclamation:",
+        "Enter an adjective:",
+        "Enter a teacher's name:",
+        "Enter a fictional language:",
+        "Enter a verb:",
+        "Enter a kitchen utensil:",
+        "Enter another plural noun:",
+        "Enter a food:",
+        "Enter an animal:",
+        "Enter a liquid:",
+        "Enter a song title:",
+        "Enter another plural noun:",
+        "Enter a school supply:",
+        "Enter a condiment:",
+        "Enter a number:",
+        "Enter a preposition:",
+        "Enter another adjective:",
+        "Enter an emotion:",
+        "Enter a snack:",
+        "Enter a tool:",
+        "Enter a catchphrase:",
+        "Enter a shape:",
+        "Enter a place:"
+    ],
+    "template": """
+I woke up feeling like something was off. My blanket was made of {0}, my pillow was a {1}, 
+and the clock said {2}... backwards. The sky outside was {3}, and the sun was setting in the {4} instead of rising. 
+Downstairs, my {5} was doing yoga on the ceiling while eating {6} with a fork taped to their elbow.  
+“{7}!” they said, “You’re {8} for school!”
+
+At school, things got weirder. My teacher {9} was speaking {10}, and our lesson was on how to {11} 
+using a {12} and a rubber duck. During math class, numbers turned into {13} and floated out the window.
+
+At lunch, I was served {14} in a shoe, and the principal turned into a {15} after drinking {16}. 
+He jumped on the announcements and started singing “{17}” in perfect harmony with a choir of {18}. 
+I just sat there, dipping my {19} into {20}, wondering if this was a dream or a new reality.
+
+When I finally got home, my house had grown {21} extra floors and floated {22} above the neighborhood. 
+Inside, everything was upside-down, and my dog was now a {23} poet who spoke in rhymes about {24}. 
+I took a bite of {25}, which turned into a {26}, and shouted “{27}!” 
+Then everything swirled into a vortex of {28}s and I woke up — or maybe I didn’t. 
+Honestly, I’m still not sure if this is real life, or just another day in {29}.
+"""
+},
+    "The Adventurer’s Deception": {
+        "prompts": [
+        "Enter a day of the week:",
+        "Enter a name:",
+        "Enter an adjective:",
+        "Enter a noun:",
+        "Enter another adjective:",
+        "Enter an object:",
+        "Enter a country:",
+        "Enter a type of creature:",
+        "Enter another noun:",
+        "Enter a type of food:",
+        "Enter a fruit:",
+        "Enter a flower:",
+        "Enter a drink name:",
+        "Enter another adjective:",
+        "Enter an animal:",
+        "Enter a verb:",
+        "Enter a dance style:",
+        "Enter another dance style:",
+        "Enter a number:",
+        "Enter a plural insect:",
+        "Enter a plural noun:",
+        "Enter another object:",
+        "Enter a pronoun (he/she/they):",
+        "Enter a candy name:",
+        "Enter a color:",
+        "Enter another animal:"
+    ],
+    "template": """
+Last {0}, my friend {1} and I went on an amazing journey. We started off in my {2} backyard, digging for treasure.
+After a while, we heard a sound. We kept digging, where we found a box resembling a {3}. We dug until we could unearth the box.
+In there, we found a map leading to a {4} treasure, along with a(n) {5}. We were astounded!
+
+The map showed a path, leading us to {6}. The map contained a second part, showing a hidden treasure guarded by {7}.
+We both looked at each other, wondering if this was worth the risk. After a while, my friend asked me “what’s the harm in trying?”
+We packed our bags, {8}, and our magic wands, and set out to find the portal hidden in our neighborhood. My friend got tired,
+and took a break to snack on some {9}. After our snack break, we made it through the woods, and we finally found the portal.
+
+Using our wands, we chanted the special words that would activate the portal. Together, we joined our wands and shouted “{10}, {11}, {12}!”
+The portal started swirling, and we quickly jumped in.
+
+Looking around, we noticed we were in a dense jungle. My friend looked at me, looking a bit {13}. “Are you sure we’re in the right place?” {1} asked.
+“Of course we are!” I said, and pointed to the map. We began to walk, when we heard a(n) {14}’s call. We looked around, but we saw nothing.
+All of a sudden, we saw a mysterious creature fly over our heads. Landing on a tree, the creature began to {15}. We looked at each other, a bit confused.
+The animal then began to speak.
+
+“Those who dare enter this jungle, must perform the ritual dance!” We both got nervous, but began dancing. I started doing the {16}, while {1} started doing {17}.
+The {14} began to laugh, and raised its arm to point us in the right direction.
+
+We walked for {18} hours, and we began to question if this was the right way, after all. All of a sudden, we felt the ground give out underneath us,
+and we plummeted towards the ground. We were surrounded by a swarm of {19} as we fell, which magically slowed our fall! We landed on a pile of {20}.
+We looked around, then got up. As we walked along the tunnel, we found a magical {21} embedded in rock. The sign read “only the worthy shall wield the {21}.”
+I looked at my friend, and {22} walked over and tried to pull it, but to no avail. It was all up to me!
+
+I walked over and yanked on the {21}, and it gave way. I held it up to the light, where it glistened. As we kept walking, following the map,
+my friend pulled out {22} wand, and we finally stumbled upon the {7}. I held up the {21}, ready to fight.
+The creature snatched it from my hand, and it began to speak. “Finally, I’ve been looking for that!” it cried out. The {7} curled up to the side and yawned.
+I was expecting more of a fight…
+
+My friend and I approached the treasure chest, but we found it was locked. We both held up our wands, and tried the unlock spell.
+“{23}, {24}, {25}!” The lock opened and fell, and we opened the chest. When we looked inside, our faces dropped. Inside was a note that read “gotcha.” What a bust!
+"""
+},
+    "Planet Strange": {
+        "prompts": [
+        "Enter a large number:",
+        "Enter a funny planet name:",
+        "Enter a plural noun (alien species):",
+        "Enter a type of fish:",
+        "Enter a male name:",
+        "Enter a verb:",
+        "Enter a name (town):",
+        "Enter a flower:",
+        "Enter a noun (disguise):",
+        "Enter a female name:",
+        "Enter another male name:",
+        "Enter another female name:",
+        "Enter a name:",
+        "Enter a pronoun (his/her/their):",
+        "Enter a noun (object):",
+        "Enter a foreign planet name:"
+    ],
+    "template": """
+In the year {0}, planet {1} had decided to make contact with Earth.
+Its most intelligent creatures, the {2}, decided that they would be the ones to travel all the way over.
+Using their special spaceships, they were able to make it there while they were in cryosleep. Upon arrival, they were greeted by a terrible sight!
+These creatures, called humans, were tall, only came in a few shades, and they smelled like {3}. Yuck!
+
+These creatures, called humans, had terrible habits. For starters, they only cleaned themselves once a day.
+The first man they met was named {4}. A bit strange… {4} was tall, and he grew hair out of his face.
+When they first made contact, {4} let out a loud scream, and he began to {5}. The {2} decided that he was too strange,
+not to mention he wore some weird metal on his teeth and grew hair out of his face.
+
+The {2} decided to explore the planet. They walked to the nearest large town, named {6}.
+At {6}, they encountered various stores. In a weird script different from their own, each store had large symbols
+that communicated the name and, presumably, what they sold. The women, with their long hair and strangely hairless bodies,
+walked around in long robes and smelled like {7}. The men were significantly less attractive than their women, and they smelled much worse.
+So as not to draw attention, the {2} decided to put on disguises in order to blend in.
+Using their special {8}, they transformed into humanlike creatures and stole some clothes.
+The two main {2} took on human names, {9} and {10}.
+
+Growing tired of looking at the stores, the {2} decided they would take matters into their own hands.
+They tiptoed away to a more secluded area and kidnapped the nearest human. Her name was {11}.
+
+{11} screamed as they dragged her away, so they decided to call for help.
+Their alien friend, {12}, used {13} invisible flying saucer in order to beam all of them up before {11} got them caught.
+{11} looked around in terror. “How did you find me?” she cried out. The {2} all looked at each other, confused.
+“We chose you randomly,” {9} answered. {11} reached into her pocket, and the aliens gasped.
+She pulled out a {14} and pressed the button, which quickly revealed that she, too, was part of the {2}!
+She explained to them that, long ago, she was the queen of {15}, but, overthrown by her brother,
+she had stolen a spaceship and escaped to the planet Earth, using constant cryosleep to keep herself young.
+
+The {2} did not believe her, but decided she was crazy, so they decided to throw her out.
+They beamed her back down to the planet, where she became angry. She looked up at the sky,
+and she swore vengeance against the {2} for disrespecting her twice now.
+
+To be continued…
+"""
+},
+    "A Son’s Journey": {
+        "prompts": [
+        "Enter a male name:",
+        "Enter an occupation:",
+        "Enter another male name:",
+        "Enter a castle name:",
+        "Enter a city name:",
+        "Enter an adjective:",
+        "Enter a noun:",
+        "Enter another adjective:",
+        "Enter a third adjective:",
+        "Enter an emotion:",
+        "Enter a verb:",
+        "Enter an animal:",
+        "Enter another verb:"
+    ],
+    "template": """
+Long ago, there lived a young boy named {0}. {0} was a poor {1}, living in the village with his mother. One day, his mother became very ill, and he decided he needed to do everything in his power to help her. Lacking money, he called on his friends for favors, who explored the town for a possible cure for her mysterious illness.
+{0}’s friend, {2}, ran back to {0}’s house. “{0}! The local witch said she would help.”
+{0} gasped. “There is no way we are getting help from a witch!”
+“Come on, do you want your mother to live or not?” responded {2}. {0} huffed, but he reluctantly agreed.
+Walking together, the two boys walked to the witch’s house. The witch let out a cackle upon seeing the boys. Walking over to her cauldron, she looked at {0}. “So, you are in need of my help?” she said, her voice sounding like fire crackling. {0} nodded, looking at the witch in fear. The witch smiled.
+“Very well, but you need to follow my directions carefully. In order to pay for saving your mother’s life, you must sacrifice another. You must travel to castle {3} and bring me the heart of the king.”
+The boy gasped, “The heart of the king? I cannot kill him!”
+The witch growled. “Only death can pay for life!” she cried out, “Now, go!”
+{0} scurried out, with {2} at his heels. {2} looked at his dear friend. “I will go with you.”
+“No,” said {0}, solemnly. “This is something I have to do myself. I won’t have blood on your hands.”
+Traveling to {4}, {2} looked around for any clues that led to the secret castle entrance. Specifically, a(n) {5} {6} was rumored to be able to teleport people to the secret tunnels. Looking at the different shops in the city center, he finally found a(n) {7} looking man who seemed to know about the {5} {6}. He approached the man, but the man hissed at him. Not feeling very brave, {0} ran away.
+After looking for a while, the boy admitted defeat. He dejectedly walked away from the city center, towards the woods. As he was walking, he heard a(n) {8} voice. Heading towards it, he noticed a glowing pond. The voice called out, “Tell me of your truest desire.”
+The boy teared up, feeling as if he could trust the voice. He reached out and touched the water, then the water began to swirl. He saw his own reflection in the water, slowly becoming distorted. {0} felt {9}; what could this be? He tried to remove his hand, but he lost his balance. After falling in the water, he felt it swirling around him.
+The last thing the boy remembered was the bright blue water surrounding him, before he was tossed out of the water. He got up and started to {10}, almost as if in a trance. He quickly snapped out of it, then ran all the way home.
+He approached his mother, who suddenly looked as healthy as a(n) {11}! Confused, {0} asked about her illness, to which she responded with, “What do you mean?” Turning to look at his own reflection, he noticed he looked completely different. Gone were his scruffy, tattered clothes. Instead, he looked younger, healthier, and stronger. He looked around at his newfound riches, and he felt a sudden urge to {12}. What world had he been transported to? He quickly hugged his mom, who hugged him in return. Though he wished to celebrate, the words the witch told him rang in his ears. “Only death can pay for life.”
+"""
+},
+
 }
+
+
 def create_option_buttons(option_texts):
     buttons = []
     y_start = 40
@@ -116,7 +608,7 @@ class InputBox:  # this helps set it up so we dont need to enter each time
             else:
                 self.active = False
                 self.color = GRAY
-    
+
             if self.voice_button_rect.collidepoint(event.pos):
                 self.text = InputBox.listen_for_input() or ""
                 self.active = False
@@ -140,7 +632,7 @@ class InputBox:  # this helps set it up so we dont need to enter each time
 
         pygame.draw.rect(screen, GRAY, self.voice_button_rect)
         screen.blit(mic_icon, self.voice_button_rect.topleft)
-        
+
     @staticmethod
     def listen_for_input():
         recognizer = sr.Recognizer()
@@ -158,6 +650,7 @@ class InputBox:  # this helps set it up so we dont need to enter each time
         except sr.RequestError:
             print("Could not request results from Google Speech Recognition service.")
             return None
+
 
 def main():
     final_story = ""
@@ -229,5 +722,7 @@ def main():
 
     pygame.quit()
     sys.exit()
+
+
 if __name__ == "__main__":
     main()

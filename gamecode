@@ -659,8 +659,8 @@ def draw_buttons(button_list): #actual aesthetics
         label_rect = label.get_rect(center=rect.center)
         screen.blit(label, label_rect)
 
-class Inputs: #sorry for the long code, creates a class for the inputs
-    def __init__(self, x, y, w, h, prompt): #initializing
+class Inputs:
+    def __init__(self, x, y, w, h, prompt):  # initializing
         self.rect = pygame.Rect(x, y, w, h)
         self.color = letters
         self.text = ''
@@ -668,9 +668,7 @@ class Inputs: #sorry for the long code, creates a class for the inputs
         self.active = False
         self.voice_button_rect = pygame.Rect(x + w + 10, y, 40, h)
 
-
-
-    def draw_text_wrapped(self, screen, font, color, max_width, scroll_offset=0): #drawing the actual wrapped text
+    def draw_text_wrapped(self, screen, font, color, max_width, scroll_offset=0):
         words = self.text.split(' ')
         x, y = self.rect.x + 5, self.rect.y + 5  # Adjust to be inside the box
         line = ""
@@ -689,9 +687,10 @@ class Inputs: #sorry for the long code, creates a class for the inputs
             text_surface = font.render(line, True, color)
             screen.blit(text_surface, (x, y))
 
-    def handle_event(self, event): #voice
+    def handle_event(self, event, scroll_offset):
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(event.pos):
+            adjusted_rect = self.rect.move(0, scroll_offset)  # Adjust input box with scroll offset
+            if adjusted_rect.collidepoint(event.pos):  # Check if click is inside input box
                 self.active = True
                 self.color = boxes
             else:
@@ -712,7 +711,7 @@ class Inputs: #sorry for the long code, creates a class for the inputs
             else:
                 self.text += event.unicode
 
-    def draw(self, screen, font): # draw wrapped prompt text above the input box
+    def draw(self, screen, font):
         prompt_rect = pygame.Rect(self.rect.x, self.rect.y - 45, self.rect.width, 40)
         render_text_wrapped(self.prompt, font, boxes, prompt_rect, screen)
         # input box drawing
@@ -747,7 +746,7 @@ class Inputs: #sorry for the long code, creates a class for the inputs
         return None
 
 
-def main(): #main function that sets up the actual stages for the game
+def main():  # Main function that sets up the actual stages for the game
     final_story = ""
     selected_difficulty = None
     story_selected = ""
@@ -757,33 +756,36 @@ def main(): #main function that sets up the actual stages for the game
     story_inputs = []
     play_again_button = create_play_again_button()
     scroll_offset = 0
-    scroll_speed = 40 #these are added to implement scroll function
+    scroll_speed = 40  # These are added to implement the scroll function
 
     while running:
         screen.fill(background)
 
-        # drawing
+        # Drawing
         if stage == 1:
             draw_buttons(difficulty_buttons)
         elif stage == 2:
             draw_buttons(option_buttons)
 
-        elif stage == 3:
+        if stage == 3:
             for box in story_inputs:
-                # this is applying the scroll feature to the buttons so they move all together
+                # Adjust input box position for scrolling
                 box.rect.y -= scroll_offset
                 box.voice_button_rect.y -= scroll_offset
+                # Handle events with scroll offset
+                box.handle_event(event, scroll_offset)
+                # Draw the input box and reset its position after scrolling
                 box.draw(screen, font)
                 # Reset positions after drawing
                 box.rect.y += scroll_offset
                 box.voice_button_rect.y += scroll_offset
 
-        elif stage == 4: #adding the play again button in stage 4
+        elif stage == 4:  # Adding the play again button in stage 4
             text_rect = pygame.Rect(50, 150, 1100, 400)
             render_text_wrapped(final_story, font, boxes, text_rect, screen)
             draw_play_again_button(screen, play_again_button)
 
-        # events
+        # Events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -792,6 +794,8 @@ def main(): #main function that sets up the actual stages for the game
             if event.type == pygame.MOUSEWHEEL and stage == 3:
                 scroll_offset -= event.y * scroll_speed
                 scroll_offset = max(0, scroll_offset)
+                max_scroll = len(story_inputs) * 100  # scroll limit
+                scroll_offset = min(scroll_offset, max_scroll)
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if stage == 1:
@@ -802,22 +806,22 @@ def main(): #main function that sets up the actual stages for the game
                             stage = 2
                             break
 
-
-
-                elif stage == 2:
+                if stage == 2:
                     for text, rect in option_buttons:
                         if rect.collidepoint(event.pos):
                             story_selected = text
                             story_inputs = []
+
                             if story_selected in story_data:
                                 prompts = story_data[story_selected]["prompts"]
-                                y = 60  # starting Y position
+                                y = 60  # Starting Y position
+
                                 for prompt in prompts:
-                                    story_inputs.append(Inputs(100, y, 400, 40, prompt))
-                                    y += 100  # 40 for input box + 60 for prompt and spacing
+                                    story_inputs.append(Inputs(100, y + scroll_offset, 400, 40, prompt))
+                                    y += 100  # 40 for input box height + 60 for prompt and spacing
 
                             stage = 3
-                            break
+                            break  # End the loop after the story is selected
 
                 elif stage == 4:
                     if play_again_button.collidepoint(event.pos):
@@ -829,9 +833,10 @@ def main(): #main function that sets up the actual stages for the game
                         story_inputs = []
                         play_again_button = create_play_again_button()
                         break
+
             if stage == 3:
                 for box in story_inputs:
-                        box.handle_event(event)
+                    box.handle_event(event, scroll_offset)
 
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                     inputs = [box.text for box in story_inputs]
@@ -842,7 +847,6 @@ def main(): #main function that sets up the actual stages for the game
 
     pygame.quit()
     sys.exit()
-
 
 if __name__ == "__main__":
     main()

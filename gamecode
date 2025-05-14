@@ -4,43 +4,74 @@ import speech_recognition as sr
 
 pygame.init()
 
-# Display setup (edit later)
-screen = pygame.display.set_mode((1300, 2500))
+# this is how the actual screen will be set up
+screen_width = 1300
+screen_height = 2700
+screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Select Difficulty")
 
-# Font setup (edit later)
-font = pygame.font.SysFont(None, 20)
+# font setup
+font = pygame.font.SysFont(None, 24)
 
-# Colors (edit later)
-WHITE = (255, 255, 255)
-GRAY = (200, 200, 200)
-BLACK = (0, 0, 0)
+# colors
+Background = (73, 66, 105)
+Boxes = (255, 255, 255)
+Letters = (92, 25, 40)
 
-# Load microphone icon
+# Load in microphone icon
 mic_icon = pygame.image.load("mic_icon.png")
 mic_icon = pygame.transform.scale(mic_icon, (30, 30))
 
-# Button setup: (label, rectangle)
+def render_text_wrapped(text, font, color, rect, surface, line_spacing = 5): #wraps text for final stories if words are too long
+    words = text.split(' ')
+    x, y = rect.topleft
+    max_width, max_height = rect.size
+    line = ""
+
+    for word in words:
+        word_width, word_height = font.size(word)
+        if font.size(line + word)[0] <= max_width:
+            line += word + " "
+        else:
+            rendered_line = font.render(line, True, color)
+            surface.blit(rendered_line, (x, y))
+            y += word_height + line_spacing
+            line = word + " "
+
+    if line:
+        rendered_line = font.render(line, True, color)
+        surface.blit(rendered_line, (x, y))
+
+def create_play_again_button(): #creates a button at the end of stage 4
+    play_again_button = pygame.Rect(500, 650, 230, 40)  # Position and size of the button
+    return play_again_button
+
+def draw_play_again_button(screen, button_rect): #this actually draws the button (aesthetics)
+    pygame.draw.rect(screen, (255, 255, 255), button_rect)
+    font = pygame.font.SysFont(None, 36)
+    text = font.render("Play Again", True, (0, 0, 0))
+    screen.blit(text, (button_rect.x + 50, button_rect.y + 10))
+
+
+# button setup for the mode selector
 difficulty_buttons = [
-    ("Easy", pygame.Rect(200, 60, 200, 50)),
-    ("Medium", pygame.Rect(200, 140, 200, 50)),
-    ("Hard", pygame.Rect(200, 220, 200, 50)),
-]
+    ("Easy", pygame.Rect(425, 150, 500, 100)),
+    ("Medium", pygame.Rect(425, 320, 500, 100)),
+    ("Hard", pygame.Rect(425, 490, 500, 100)), ]
 
 # Options per difficulty
 options = {
     "Easy": [
         "The Sandwich", "My Strange Pet", "Adventure Time",
-        "My Inspiration", "A Game of Thrones"
-    ],
+        "My Inspiration", "A Game of Thrones" ],
+
     "Medium": [
         "Camp Nightmare", "Science Fair", "The Captain’s Journey",
-        "Animal Farm", "The Art Offender"
-    ],
+        "Animal Farm", "The Art Offender" ],
+
     "Hard": [
         "Planet Wobble", "The Upside Down", "The Adventurer’s Deception",
-        "Planet Strange", "A Son’s Journey"
-    ]
+        "Planet Strange", "A Son’s Journey" ]
 }
 
 # Prompts and templates for individual stories
@@ -50,8 +81,7 @@ story_data = {
             "Enter an adjective:", "Enter a type of food:", "Enter another type of food:",
             "Enter a noun:", "Enter a liquid:", "Enter a plural noun:",
             "Enter another adjective:", "Enter a person's name:", "Enter an animal:",
-            "Enter an emotion:", "Enter another noun:", "Enter a color:"
-        ],
+            "Enter an emotion:", "Enter another noun:", "Enter a color:" ],
         "template": """
 I was so {0} today that I forgot to pack my lunch!
 So, I grabbed whatever I could find in the kitchen and made a sandwich with {1}, {2}, and a slice of {3}.
@@ -64,11 +94,18 @@ I guess next time I’ll just pack a normal lunch!
     },
     "My Strange Pet": {
         "prompts": [
-            "Enter an animal:", "Enter an adjective:", "Enter a verb ending in -ing:",
-            "Enter a noun:", "Enter a clothing item:", "Enter a place:",
-            "Enter a device:", "Enter a food:", "Enter an exclamation:",
-            "Enter a nonsense word:", "Enter another noun:", "Enter a silly name:"
-        ],
+            "Enter an animal:",
+            "Enter an adjective:",
+            "Enter a verb ending in -ing:",
+            "Enter a noun:",
+            "Enter a clothing item:",
+            "Enter a place:",
+            "Enter a device:",
+            "Enter a food:",
+            "Enter an exclamation:",
+            "Enter a nonsense word:",
+            "Enter another noun:",
+            "Enter a silly name:" ],
         "template": """
 My pet {0} is the most {1} creature I’ve ever met.
     Every morning, it wakes me up by {2} on my bed and eating my {3} right off my desk.
@@ -82,11 +119,18 @@ My pet {0} is the most {1} creature I’ve ever met.
 
   "Adventure Time": {
         "prompts": [
-            "Enter an adjective:", "Enter another adjective:", "Enter a place:",
-            "Enter a third adjective:", "Enter a verb:", "Enter a past-tense verb:",
-            "Enter an adverb:", "Enter a type of food:", "Enter a fourth adjective:",
-            "Enter a fifth adjective:", "Enter another verb:", "Enter a second adverb:"
-        ],
+            "Enter an adjective:",
+            "Enter another adjective:",
+            "Enter a place:",
+            "Enter a third adjective:",
+            "Enter a verb:",
+            "Enter a past-tense verb:",
+            "Enter an adverb:",
+            "Enter a type of food:",
+            "Enter a fourth adjective:",
+            "Enter a fifth adjective:",
+            "Enter another verb:",
+            "Enter a second adverb:" ],
         "template": """
 In the morning, it was {0} outside. The {1} car took off and drove down the road.
     I decided I wanted to go to the {2}. While I was there, it got too {3}.
@@ -96,7 +140,7 @@ In the morning, it was {0} outside. The {1} car took off and drove down the road
     I immediately felt {9}, so I decided to {10}. My day went {11}!
 """
     },
-    "My Inspritation": {
+    "My Inspiration": {
     "prompts": [
         "Enter an adjective:",
         "Enter a verb:",
@@ -107,8 +151,7 @@ In the morning, it was {0} outside. The {1} car took off and drove down the road
         "Enter a pronoun (he/she/they):",
         "Enter a place:",
         "Enter a past-tense verb:",
-        "Enter a noun:"
-    ],
+        "Enter a noun:" ],
     "template": """
 When I was younger, I experienced a very {0} event. I saw my mother {1}!
 Though this may seem mundane to most, I couldn’t believe my eyes. See, I had never seen anyone {1}.
@@ -130,8 +173,7 @@ Why did we go there, do you ask? Well, the answer is obvious. We needed to find 
         "Enter another plural noun:",
         "Enter a third plural noun:",
         "Enter a second name:",
-        "Enter a third adjective:"
-    ],
+        "Enter a third adjective:" ],
     "template": """
 Once upon a time, a(n) {0} {1} ruled the kingdom of {2}.
 {1} was given a special name, {3}. {3} was a(n) {4} ruler.
@@ -162,8 +204,7 @@ The kingdom remained prosperous for years to come!
         "Enter a type of liquid:",
         "Enter a clothing item:",
         "Enter a third adjective:",
-        "Enter an insect:"
-    ],
+        "Enter an insect:" ],
     "template": """
 I was excited for camp at {0}, but everything went wrong the second we arrived. My tent was full of holes and smelled like {1}.
 During the first night, I found {2} crawling all over my sleeping bag, and a raccoon stole my {3}.
@@ -198,8 +239,7 @@ Camp was definitely {16}, but I made new friends — and a lasting fear of {17}.
         "Enter a substance:",
         "Enter another noun:",
         "Enter a dessert:",
-        "Enter a type of vehicle:"
-    ],
+        "Enter a type of vehicle:" ],
     "template": """
 This year’s science fair at {0} was the weirdest one yet.
 I built a robot that could {1} and {2} using just {3} and an old {4} I found in my garage.
@@ -231,8 +271,7 @@ We all celebrated with {18}, and I promised myself I’d go even bigger next yea
         "Enter a food:",
         "Enter an object:",
         "Enter a celebrity:",
-        "Enter a pronoun:"
-    ],
+        "Enter a pronoun:" ],
     "template": """
 It was a(n) {0} morning when Captain {1} woke up in {2} room with one goal: to find the legendary {3}. 
 Armed with only a(n) {4} map and a loyal {5} named {6}, the captain set sail on their trusty {7} named The {8}. 
@@ -257,8 +296,7 @@ Captain {1} tried to run after it, but to no avail. To make matters worse, a hug
         "Enter a noun:",
         "Enter a silly object:",
         "Enter a liquid:",
-        "Enter another animal:"
-    ],
+        "Enter another animal:" ],
     "template": """
 Yesterday was the most {0} day of my life. I woke up to the sound of a(n) {1} knocking at my door. 
 Thinking it was my {2}, I got up and opened the door to find the {1} doing flips across my hallway. 
@@ -287,8 +325,7 @@ Who would even believe me if I told them the truth!
         "Enter an adjective:",
         "Enter another adjective:",
         "Enter another animal:",
-        "Enter another verb:"
-    ],
+        "Enter another verb:" ],
     "template": """
 It all started when my friend, {0} suggested we go to {1}. Thinking it could be fun, I agreed. Big mistake! 
 On the plane, we met a funny looking guy, who introduced himself by the name of {2}. He sat in between us, and he smelled like a(n) {3}. 
@@ -340,8 +377,7 @@ Long story short, I have been seeing this creature everywhere ever since. A piec
         "Enter a noun:",
         "Enter a dessert:",
         "Enter a place:",
-        "Enter a beverage:"
-    ],
+        "Enter a beverage:" ],
     "template": """
 Captain {0}, reporting for interstellar exploration! Today, my crew and I are launching aboard the *{1} Falcon*, 
 a ship equipped with hyper-thrusters, a snack bar, and exactly 742 {2}. Our destination? 
@@ -394,8 +430,7 @@ autographs and eating space-grade {29} with {5}, planning our next voyage to {30
         "Enter a tool:",
         "Enter a catchphrase:",
         "Enter a shape:",
-        "Enter a place:"
-    ],
+        "Enter a place:" ],
     "template": """
 I woke up feeling like something was off. My blanket was made of {0}, my pillow was a {1}, 
 and the clock said {2}... backwards. The sky outside was {3}, and the sun was setting in the {4} instead of rising. 
@@ -443,8 +478,7 @@ Honestly, I’m still not sure if this is real life, or just another day in {29}
         "Enter a pronoun (he/she/they):",
         "Enter a candy name:",
         "Enter a color:",
-        "Enter another animal:"
-    ],
+        "Enter another animal:" ],
     "template": """
 Last {0}, my friend {1} and I went on an amazing journey. We started off in my {2} backyard, digging for treasure.
 After a while, we heard a sound. We kept digging, where we found a box resembling a {3}. We dug until we could unearth the box.
@@ -497,8 +531,7 @@ My friend and I approached the treasure chest, but we found it was locked. We bo
         "Enter a name:",
         "Enter a pronoun (his/her/their):",
         "Enter a noun (object):",
-        "Enter a foreign planet name:"
-    ],
+        "Enter a foreign planet name:" ],
     "template": """
 In the year {0}, planet {1} had decided to make contact with Earth.
 Its most intelligent creatures, the {2}, decided that they would be the ones to travel all the way over.
@@ -550,8 +583,7 @@ To be continued…
         "Enter an emotion:",
         "Enter a verb:",
         "Enter an animal:",
-        "Enter another verb:"
-    ],
+        "Enter another verb:" ],
     "template": """
 Long ago, there lived a young boy named {0}. {0} was a poor {1}, living in the village with his mother. One day, his mother became very ill, and he decided he needed to do everything in his power to help her. Lacking money, he called on his friends for favors, who explored the town for a possible cure for her mysterious illness.
 {0}’s friend, {2}, ran back to {0}’s house. “{0}! The local witch said she would help.”
@@ -569,30 +601,30 @@ The boy teared up, feeling as if he could trust the voice. He reached out and to
 The last thing the boy remembered was the bright blue water surrounding him, before he was tossed out of the water. He got up and started to {10}, almost as if in a trance. He quickly snapped out of it, then ran all the way home.
 He approached his mother, who suddenly looked as healthy as a(n) {11}! Confused, {0} asked about her illness, to which she responded with, “What do you mean?” Turning to look at his own reflection, he noticed he looked completely different. Gone were his scruffy, tattered clothes. Instead, he looked younger, healthier, and stronger. He looked around at his newfound riches, and he felt a sudden urge to {12}. What world had he been transported to? He quickly hugged his mom, who hugged him in return. Though he wished to celebrate, the words the witch told him rang in his ears. “Only death can pay for life.”
 """
-},
-
-}
+},}
 
 
-def create_option_buttons(option_texts):
+def create_option_buttons(option_texts): #creates buttons to pick the story
     buttons = []
-    y_start = 40
+    y_start = 140
+    button_width = 300
+    button_height = 50
+    x = ((screen_width - button_width) // 2) #to center the buttons
     for i, text in enumerate(option_texts):
-        rect = pygame.Rect(100, y_start + i * 60, 400, 50)
+        rect = pygame.Rect(x, y_start + i * 100, button_width, button_height)
         buttons.append((text, rect))
     return buttons
 
 
-def draw_buttons(button_list):
+def draw_buttons(button_list): #actual aesthetics
     for text, rect in button_list:
         pygame.draw.rect(screen, GRAY, rect)
         label = font.render(text, True, BLACK)
         label_rect = label.get_rect(center=rect.center)
         screen.blit(label, label_rect)
 
-
-class InputBox:  # this helps set it up so we dont need to enter each time
-    def __init__(self, x, y, w, h, prompt):
+class Inputs: #sorry for the long code, creates a class for the inputs
+    def __init__(self, x, y, w, h, prompt): #initializing
         self.rect = pygame.Rect(x, y, w, h)
         self.color = GRAY
         self.text = ''
@@ -600,7 +632,45 @@ class InputBox:  # this helps set it up so we dont need to enter each time
         self.active = False
         self.voice_button_rect = pygame.Rect(x + w + 10, y, 40, h)
 
-    def handle_event(self, event):
+    def draw_prompt_wrapped(self, surface, font, color, max_width, scroll_offset=0): #this is to wrap the prompts (might not be useful)
+        words = self.prompt.split(' ')
+        line = ""
+        x, y = self.rect.x, self.rect.y - 50  # space above input box
+        line_spacing = 5
+
+        for word in words:
+            if font.size(line + word)[0] <= max_width:
+                line += word + " "
+            else:
+                rendered_line = font.render(line, True, color)
+                surface.blit(rendered_line, (x, y))
+                y += font.get_height() + line_spacing
+                line = word + " "
+
+        if line:
+            rendered_line = font.render(line, True, color)
+            surface.blit(rendered_line, (x, y))
+
+    def draw_text_wrapped(self, screen, font, color, max_width, scroll_offset=0): #drawing the actual wrapped text
+        words = self.text.split(' ')
+        x, y = self.rect.x + 5, self.rect.y + 5  # Adjust to be inside the box
+        line = ""
+        line_spacing = 5
+
+        for word in words:
+            if font.size(line + word)[0] <= max_width:
+                line += word + " "
+            else:
+                text_surface = font.render(line, True, color)
+                screen.blit(text_surface, (x, y))
+                y += font.get_height() + line_spacing
+                line = word + " "
+
+        if line:
+            text_surface = font.render(line, True, color)
+            screen.blit(text_surface, (x, y))
+
+    def handle_event(self, event): #voice
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.active = True
@@ -623,13 +693,14 @@ class InputBox:  # this helps set it up so we dont need to enter each time
             else:
                 self.text += event.unicode
 
-    def draw(self, screen, font):
+    def draw(self, screen, font): # draw wrapped prompt text above the input box
+        prompt_rect = pygame.Rect(self.rect.x, self.rect.y - 45, self.rect.width, 40)
+        render_text_wrapped(self.prompt, font, BLACK, prompt_rect, screen)
+        # input box drawing
         pygame.draw.rect(screen, self.color, self.rect, 2)
-        prompt_surface = font.render(self.prompt, True, BLACK)
-        text_surface = font.render(self.text, True, BLACK)
-        screen.blit(prompt_surface, (self.rect.x, self.rect.y - 25))
-        screen.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
-
+        # text inside box
+        self.draw_text_wrapped(screen, font, BLACK, self.rect.width - 10)
+        # voice input box and icon
         pygame.draw.rect(screen, GRAY, self.voice_button_rect)
         screen.blit(mic_icon, self.voice_button_rect.topleft)
 
@@ -651,40 +722,50 @@ class InputBox:  # this helps set it up so we dont need to enter each time
             print("Could not request results from Google Speech Recognition service.")
             return None
 
-
-def main():
+def main(): #main function that sets up the actual stages for the game
     final_story = ""
     selected_difficulty = None
     story_selected = ""
-    stage = 1  # 1 = choose difficulty, 2 = choose story, 3 = input words
+    stage = 1  # stage 1 = choose difficulty, stage 2 = story selection, 3 = word inputting, initial stage
     option_buttons = []
     running = True
     story_inputs = []
+    play_again_button = create_play_again_button()
+    scroll_offset = 0
+    scroll_speed = 40 #these are added to implement scroll function
 
     while running:
         screen.fill(WHITE)
 
-        #  DRAWING
+        # drawing
         if stage == 1:
             draw_buttons(difficulty_buttons)
         elif stage == 2:
             draw_buttons(option_buttons)
+
         elif stage == 3:
             for box in story_inputs:
+                # this is applying the scroll feature to the buttons so they move all together
+                box.rect.y -= scroll_offset
+                box.voice_button_rect.y -= scroll_offset
                 box.draw(screen, font)
-        elif stage == 4:
-            story_lines = final_story.splitlines()
-            y = 150
-            for line in story_lines:
-                text_surface = font.render(line, True, BLACK)
-                screen.blit(text_surface, (50, y))
-                y += 40
+                # Reset positions after drawing
+                box.rect.y += scroll_offset
+                box.voice_button_rect.y += scroll_offset
 
-        # EVENTS
+        elif stage == 4: #adding the play again button in stage 4
+            text_rect = pygame.Rect(50, 150, 1100, 400)  
+            render_text_wrapped(final_story, font, BLACK, text_rect, screen)
+            draw_play_again_button(screen, play_again_button)
+
+        # events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
                 break
+            if event.type == pygame.MOUSEWHEEL and stage == 3:
+                scroll_offset -= event.y * scroll_speed
+                scroll_offset = max(0, scroll_offset)
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if stage == 1:
@@ -695,6 +776,8 @@ def main():
                             stage = 2
                             break
 
+
+
                 elif stage == 2:
                     for text, rect in option_buttons:
                         if rect.collidepoint(event.pos):
@@ -702,16 +785,51 @@ def main():
                             story_inputs = []
                             if story_selected in story_data:
                                 prompts = story_data[story_selected]["prompts"]
-                                for i, prompt in enumerate(prompts):
-                                    y = 60 + i * 60
-                                    story_inputs.append(InputBox(100, y, 400, 40, prompt))
+                                y = 60  # starting position for the first prompt and input box
+                                for prompt in prompts:
+                                    prompt_width = rect.width - 20 
+                                    words = prompt.split(' ')
+                                    line = ""
+                                    current_width = 0
+                                    wrapped_lines = []
+                                    for word in words:
+                                        word_width, _ = font.size(word)
+                                        if current_width + word_width <= prompt_width:
+                                            line += word + " "
+                                            current_width += word_width + font.size(" ")[0]  # Account for space
+                                        else:
+                                            wrapped_lines.append(line)
+                                            line = word + " "
+                                            current_width = word_width + font.size(" ")[0]
+                                    if line:  # Add the last line if needed
+                                        wrapped_lines.append(line)
+                                    prompt_height = len(wrapped_lines) * font.get_height()
+                                    prompt_y = y  # Starting position for prompt
+                                    for wrapped_line in wrapped_lines:
+                                        prompt_surface = font.render(wrapped_line, True, BLACK)
+                                        screen.blit(prompt_surface, (rect.x + 10, prompt_y)) 
+                                        prompt_y += font.get_height() + 5  
+                                    box_y = prompt_y + 15  
+                                    story_inputs.append(InputBox(100, box_y, 400, 40, prompt))
+                                    y = box_y + 60  # 40 for the input box height, 20px of spacing between input boxes
                             stage = 3
                             break
+                elif stage == 4:
+                    if play_again_button.collidepoint(event.pos):
+                        stage = 1
+                        selected_difficulty = None
+                        story_selected = ""
+                        final_story = ""
+                        option_buttons = []
+                        story_inputs = []
+                        play_again_button = create_play_again_button()
+                        break
 
-            # Handle input boxes for stage 3
+            # input boxes for stage 3
             if stage == 3:
                 for box in story_inputs:
-                    box.handle_event(event)
+                    box.draw_prompt_wrapped(screen, font, BLACK, 400)
+                    box.draw(screen, font)
 
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                     inputs = [box.text for box in story_inputs]

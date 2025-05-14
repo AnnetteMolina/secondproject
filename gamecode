@@ -14,9 +14,9 @@ pygame.display.set_caption("Select Difficulty")
 font = pygame.font.SysFont(None, 24)
 
 # colors
-Background = (73, 66, 105)
-Boxes = (255, 255, 255)
-Letters = (92, 25, 40)
+background = (73, 66, 105)
+boxes = (255, 255, 255)
+letters = (92, 25, 40)
 
 # Load in microphone icon
 mic_icon = pygame.image.load("mic_icon.png")
@@ -618,15 +618,15 @@ def create_option_buttons(option_texts): #creates buttons to pick the story
 
 def draw_buttons(button_list): #actual aesthetics
     for text, rect in button_list:
-        pygame.draw.rect(screen, GRAY, rect)
-        label = font.render(text, True, BLACK)
+        pygame.draw.rect(screen, letters, rect)
+        label = font.render(text, True, boxes)
         label_rect = label.get_rect(center=rect.center)
         screen.blit(label, label_rect)
 
 class Inputs: #sorry for the long code, creates a class for the inputs
     def __init__(self, x, y, w, h, prompt): #initializing
         self.rect = pygame.Rect(x, y, w, h)
-        self.color = GRAY
+        self.color = letters
         self.text = ''
         self.prompt = prompt
         self.active = False
@@ -674,34 +674,34 @@ class Inputs: #sorry for the long code, creates a class for the inputs
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.active = True
-                self.color = BLACK
+                self.color = boxes
             else:
                 self.active = False
-                self.color = GRAY
+                self.color = letters
 
             if self.voice_button_rect.collidepoint(event.pos):
-                self.text = InputBox.listen_for_input() or ""
+                self.text = Inputs.listen_for_input() or ""
                 self.active = False
-                self.color = GRAY
+                self.color = letters
 
         elif event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_BACKSPACE:
                 self.text = self.text[:-1]
             elif event.key == pygame.K_RETURN:
                 self.active = False
-                self.color = GRAY
+                self.color = letters
             else:
                 self.text += event.unicode
 
     def draw(self, screen, font): # draw wrapped prompt text above the input box
         prompt_rect = pygame.Rect(self.rect.x, self.rect.y - 45, self.rect.width, 40)
-        render_text_wrapped(self.prompt, font, BLACK, prompt_rect, screen)
+        render_text_wrapped(self.prompt, font, boxes, prompt_rect, screen)
         # input box drawing
         pygame.draw.rect(screen, self.color, self.rect, 2)
         # text inside box
-        self.draw_text_wrapped(screen, font, BLACK, self.rect.width - 10)
+        self.draw_text_wrapped(screen, font, boxes, self.rect.width - 10)
         # voice input box and icon
-        pygame.draw.rect(screen, GRAY, self.voice_button_rect)
+        pygame.draw.rect(screen, letters, self.voice_button_rect)
         screen.blit(mic_icon, self.voice_button_rect.topleft)
 
     @staticmethod
@@ -735,7 +735,7 @@ def main(): #main function that sets up the actual stages for the game
     scroll_speed = 40 #these are added to implement scroll function
 
     while running:
-        screen.fill(WHITE)
+        screen.fill(background)
 
         # drawing
         if stage == 1:
@@ -754,8 +754,8 @@ def main(): #main function that sets up the actual stages for the game
                 box.voice_button_rect.y += scroll_offset
 
         elif stage == 4: #adding the play again button in stage 4
-            text_rect = pygame.Rect(50, 150, 1100, 400)  
-            render_text_wrapped(final_story, font, BLACK, text_rect, screen)
+            text_rect = pygame.Rect(50, 150, 1100, 400)
+            render_text_wrapped(final_story, font, boxes, text_rect, screen)
             draw_play_again_button(screen, play_again_button)
 
         # events
@@ -787,7 +787,7 @@ def main(): #main function that sets up the actual stages for the game
                                 prompts = story_data[story_selected]["prompts"]
                                 y = 60  # starting position for the first prompt and input box
                                 for prompt in prompts:
-                                    prompt_width = rect.width - 20 
+                                    prompt_width = rect.width - 20
                                     words = prompt.split(' ')
                                     line = ""
                                     current_width = 0
@@ -806,11 +806,11 @@ def main(): #main function that sets up the actual stages for the game
                                     prompt_height = len(wrapped_lines) * font.get_height()
                                     prompt_y = y  # Starting position for prompt
                                     for wrapped_line in wrapped_lines:
-                                        prompt_surface = font.render(wrapped_line, True, BLACK)
-                                        screen.blit(prompt_surface, (rect.x + 10, prompt_y)) 
-                                        prompt_y += font.get_height() + 5  
-                                    box_y = prompt_y + 15  
-                                    story_inputs.append(InputBox(100, box_y, 400, 40, prompt))
+                                        prompt_surface = font.render(wrapped_line, True, boxes)
+                                        screen.blit(prompt_surface, (rect.x + 10, prompt_y))
+                                        prompt_y += font.get_height() + 5
+                                    box_y = prompt_y + 15
+                                    story_inputs.append(Inputs(100, box_y, 400, 40, prompt))
                                     y = box_y + 60  # 40 for the input box height, 20px of spacing between input boxes
                             stage = 3
                             break
@@ -828,7 +828,7 @@ def main(): #main function that sets up the actual stages for the game
             # input boxes for stage 3
             if stage == 3:
                 for box in story_inputs:
-                    box.draw_prompt_wrapped(screen, font, BLACK, 400)
+                    box.draw_prompt_wrapped(screen, font, boxes, 400)
                     box.draw(screen, font)
 
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:

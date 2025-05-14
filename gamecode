@@ -1,3 +1,22 @@
+#####
+# SETUP INSTRUCTIONS:
+
+#to get the app to work, you need to install the following: (enter into terminal)
+
+   # python3 -m pip install --upgrade pip
+   # pip install pygame
+  #  pip install SpeechRecognition
+   # pip install pyaudio
+
+# for macOS if `pyaudio` fails to install, you may need to use this:
+
+  #  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  #  brew install portaudio
+  #  pip install pyaudio
+  #please follow the instructions in your terminal!!
+#######
+# Beginning of actual code
+
 import pygame
 import sys
 import speech_recognition as sr
@@ -62,26 +81,43 @@ difficulty_buttons = [
 # Options per difficulty
 options = {
     "Easy": [
-        "The Sandwich", "My Strange Pet", "Adventure Time",
-        "My Inspiration", "A Game of Thrones" ],
+        "The Sandwich",
+        "My Strange Pet",
+        "Adventure Time",
+        "My Inspiration",
+        "A Game of Thrones"],
 
     "Medium": [
-        "Camp Nightmare", "Science Fair", "The Captain’s Journey",
-        "Animal Farm", "The Art Offender" ],
+        "Camp Nightmare",
+        "Science Fair",
+        "The Captain’s Journey",
+        "Animal Farm",
+        "The Art Offender"],
 
     "Hard": [
-        "Planet Wobble", "The Upside Down", "The Adventurer’s Deception",
-        "Planet Strange", "A Son’s Journey" ]
+        "Planet Wobble",
+        "The Upside Down",
+        "The Adventurer’s Deception",
+        "Planet Strange",
+        "A Son’s Journey"]
 }
 
 # Prompts and templates for individual stories
 story_data = {
     "The Sandwich": {
         "prompts": [
-            "Enter an adjective:", "Enter a type of food:", "Enter another type of food:",
-            "Enter a noun:", "Enter a liquid:", "Enter a plural noun:",
-            "Enter another adjective:", "Enter a person's name:", "Enter an animal:",
-            "Enter an emotion:", "Enter another noun:", "Enter a color:" ],
+            "Enter an adjective:",
+            "Enter a type of food:",
+            "Enter another type of food:",
+            "Enter a noun:",
+            "Enter a liquid:",
+            "Enter a plural noun:",
+            "Enter another adjective:",
+            "Enter a person's name:",
+            "Enter an animal:",
+            "Enter an emotion:",
+            "Enter another noun:",
+            "Enter a color:"],
         "template": """
 I was so {0} today that I forgot to pack my lunch!
 So, I grabbed whatever I could find in the kitchen and made a sandwich with {1}, {2}, and a slice of {3}.
@@ -105,7 +141,7 @@ I guess next time I’ll just pack a normal lunch!
             "Enter an exclamation:",
             "Enter a nonsense word:",
             "Enter another noun:",
-            "Enter a silly name:" ],
+            "Enter a silly name:"],
         "template": """
 My pet {0} is the most {1} creature I’ve ever met.
     Every morning, it wakes me up by {2} on my bed and eating my {3} right off my desk.
@@ -130,7 +166,7 @@ My pet {0} is the most {1} creature I’ve ever met.
             "Enter a fourth adjective:",
             "Enter a fifth adjective:",
             "Enter another verb:",
-            "Enter a second adverb:" ],
+            "Enter a second adverb:"],
         "template": """
 In the morning, it was {0} outside. The {1} car took off and drove down the road.
     I decided I wanted to go to the {2}. While I was there, it got too {3}.
@@ -151,7 +187,7 @@ In the morning, it was {0} outside. The {1} car took off and drove down the road
         "Enter a pronoun (he/she/they):",
         "Enter a place:",
         "Enter a past-tense verb:",
-        "Enter a noun:" ],
+        "Enter a noun:"],
     "template": """
 When I was younger, I experienced a very {0} event. I saw my mother {1}!
 Though this may seem mundane to most, I couldn’t believe my eyes. See, I had never seen anyone {1}.
@@ -173,7 +209,7 @@ Why did we go there, do you ask? Well, the answer is obvious. We needed to find 
         "Enter another plural noun:",
         "Enter a third plural noun:",
         "Enter a second name:",
-        "Enter a third adjective:" ],
+        "Enter a third adjective:"],
     "template": """
 Once upon a time, a(n) {0} {1} ruled the kingdom of {2}.
 {1} was given a special name, {3}. {3} was a(n) {4} ruler.
@@ -204,7 +240,7 @@ The kingdom remained prosperous for years to come!
         "Enter a type of liquid:",
         "Enter a clothing item:",
         "Enter a third adjective:",
-        "Enter an insect:" ],
+        "Enter an insect:"],
     "template": """
 I was excited for camp at {0}, but everything went wrong the second we arrived. My tent was full of holes and smelled like {1}.
 During the first night, I found {2} crawling all over my sleeping bag, and a raccoon stole my {3}.
@@ -239,7 +275,7 @@ Camp was definitely {16}, but I made new friends — and a lasting fear of {17}.
         "Enter a substance:",
         "Enter another noun:",
         "Enter a dessert:",
-        "Enter a type of vehicle:" ],
+        "Enter a type of vehicle:"],
     "template": """
 This year’s science fair at {0} was the weirdest one yet.
 I built a robot that could {1} and {2} using just {3} and an old {4} I found in my garage.
@@ -271,7 +307,7 @@ We all celebrated with {18}, and I promised myself I’d go even bigger next yea
         "Enter a food:",
         "Enter an object:",
         "Enter a celebrity:",
-        "Enter a pronoun:" ],
+        "Enter a pronoun:"],
     "template": """
 It was a(n) {0} morning when Captain {1} woke up in {2} room with one goal: to find the legendary {3}. 
 Armed with only a(n) {4} map and a loyal {5} named {6}, the captain set sail on their trusty {7} named The {8}. 
@@ -296,7 +332,7 @@ Captain {1} tried to run after it, but to no avail. To make matters worse, a hug
         "Enter a noun:",
         "Enter a silly object:",
         "Enter a liquid:",
-        "Enter another animal:" ],
+        "Enter another animal:"],
     "template": """
 Yesterday was the most {0} day of my life. I woke up to the sound of a(n) {1} knocking at my door. 
 Thinking it was my {2}, I got up and opened the door to find the {1} doing flips across my hallway. 
@@ -325,7 +361,7 @@ Who would even believe me if I told them the truth!
         "Enter an adjective:",
         "Enter another adjective:",
         "Enter another animal:",
-        "Enter another verb:" ],
+        "Enter another verb:"],
     "template": """
 It all started when my friend, {0} suggested we go to {1}. Thinking it could be fun, I agreed. Big mistake! 
 On the plane, we met a funny looking guy, who introduced himself by the name of {2}. He sat in between us, and he smelled like a(n) {3}. 
@@ -377,7 +413,7 @@ Long story short, I have been seeing this creature everywhere ever since. A piec
         "Enter a noun:",
         "Enter a dessert:",
         "Enter a place:",
-        "Enter a beverage:" ],
+        "Enter a beverage:"],
     "template": """
 Captain {0}, reporting for interstellar exploration! Today, my crew and I are launching aboard the *{1} Falcon*, 
 a ship equipped with hyper-thrusters, a snack bar, and exactly 742 {2}. Our destination? 
@@ -430,7 +466,7 @@ autographs and eating space-grade {29} with {5}, planning our next voyage to {30
         "Enter a tool:",
         "Enter a catchphrase:",
         "Enter a shape:",
-        "Enter a place:" ],
+        "Enter a place:"],
     "template": """
 I woke up feeling like something was off. My blanket was made of {0}, my pillow was a {1}, 
 and the clock said {2}... backwards. The sky outside was {3}, and the sun was setting in the {4} instead of rising. 
@@ -478,7 +514,7 @@ Honestly, I’m still not sure if this is real life, or just another day in {29}
         "Enter a pronoun (he/she/they):",
         "Enter a candy name:",
         "Enter a color:",
-        "Enter another animal:" ],
+        "Enter another animal:"],
     "template": """
 Last {0}, my friend {1} and I went on an amazing journey. We started off in my {2} backyard, digging for treasure.
 After a while, we heard a sound. We kept digging, where we found a box resembling a {3}. We dug until we could unearth the box.
@@ -531,7 +567,7 @@ My friend and I approached the treasure chest, but we found it was locked. We bo
         "Enter a name:",
         "Enter a pronoun (his/her/their):",
         "Enter a noun (object):",
-        "Enter a foreign planet name:" ],
+        "Enter a foreign planet name:"],
     "template": """
 In the year {0}, planet {1} had decided to make contact with Earth.
 Its most intelligent creatures, the {2}, decided that they would be the ones to travel all the way over.
@@ -583,7 +619,7 @@ To be continued…
         "Enter an emotion:",
         "Enter a verb:",
         "Enter an animal:",
-        "Enter another verb:" ],
+        "Enter another verb:"],
     "template": """
 Long ago, there lived a young boy named {0}. {0} was a poor {1}, living in the village with his mother. One day, his mother became very ill, and he decided he needed to do everything in his power to help her. Lacking money, he called on his friends for favors, who explored the town for a possible cure for her mysterious illness.
 {0}’s friend, {2}, ran back to {0}’s house. “{0}! The local witch said she would help.”
@@ -632,24 +668,7 @@ class Inputs: #sorry for the long code, creates a class for the inputs
         self.active = False
         self.voice_button_rect = pygame.Rect(x + w + 10, y, 40, h)
 
-    def draw_prompt_wrapped(self, surface, font, color, max_width, scroll_offset=0): #this is to wrap the prompts (might not be useful)
-        words = self.prompt.split(' ')
-        line = ""
-        x, y = self.rect.x, self.rect.y - 50  # space above input box
-        line_spacing = 5
 
-        for word in words:
-            if font.size(line + word)[0] <= max_width:
-                line += word + " "
-            else:
-                rendered_line = font.render(line, True, color)
-                surface.blit(rendered_line, (x, y))
-                y += font.get_height() + line_spacing
-                line = word + " "
-
-        if line:
-            rendered_line = font.render(line, True, color)
-            surface.blit(rendered_line, (x, y))
 
     def draw_text_wrapped(self, screen, font, color, max_width, scroll_offset=0): #drawing the actual wrapped text
         words = self.text.split(' ')
@@ -707,10 +726,15 @@ class Inputs: #sorry for the long code, creates a class for the inputs
     @staticmethod
     def listen_for_input():
         recognizer = sr.Recognizer()
-        with sr.Microphone() as source:
-            print("Listening for input...")
-            recognizer.adjust_for_ambient_noise(source)
-            audio = recognizer.listen(source)
+        try:
+            with sr.Microphone() as source:
+                print("Listening for input...")
+                recognizer.adjust_for_ambient_noise(source)
+                audio = recognizer.listen(source)
+        except Exception as e:
+            print(f"Microphone error: {e}")
+            return None
+
         try:
             print("Recognizing...")
             text = recognizer.recognize_google(audio)
@@ -720,7 +744,8 @@ class Inputs: #sorry for the long code, creates a class for the inputs
             print("Sorry, I could not understand the audio.")
         except sr.RequestError:
             print("Could not request results from Google Speech Recognition service.")
-            return None
+        return None
+
 
 def main(): #main function that sets up the actual stages for the game
     final_story = ""
@@ -763,6 +788,7 @@ def main(): #main function that sets up the actual stages for the game
             if event.type == pygame.QUIT:
                 running = False
                 break
+
             if event.type == pygame.MOUSEWHEEL and stage == 3:
                 scroll_offset -= event.y * scroll_speed
                 scroll_offset = max(0, scroll_offset)
@@ -785,35 +811,14 @@ def main(): #main function that sets up the actual stages for the game
                             story_inputs = []
                             if story_selected in story_data:
                                 prompts = story_data[story_selected]["prompts"]
-                                y = 60  # starting position for the first prompt and input box
+                                y = 60  # starting Y position
                                 for prompt in prompts:
-                                    prompt_width = rect.width - 20
-                                    words = prompt.split(' ')
-                                    line = ""
-                                    current_width = 0
-                                    wrapped_lines = []
-                                    for word in words:
-                                        word_width, _ = font.size(word)
-                                        if current_width + word_width <= prompt_width:
-                                            line += word + " "
-                                            current_width += word_width + font.size(" ")[0]  # Account for space
-                                        else:
-                                            wrapped_lines.append(line)
-                                            line = word + " "
-                                            current_width = word_width + font.size(" ")[0]
-                                    if line:  # Add the last line if needed
-                                        wrapped_lines.append(line)
-                                    prompt_height = len(wrapped_lines) * font.get_height()
-                                    prompt_y = y  # Starting position for prompt
-                                    for wrapped_line in wrapped_lines:
-                                        prompt_surface = font.render(wrapped_line, True, boxes)
-                                        screen.blit(prompt_surface, (rect.x + 10, prompt_y))
-                                        prompt_y += font.get_height() + 5
-                                    box_y = prompt_y + 15
-                                    story_inputs.append(Inputs(100, box_y, 400, 40, prompt))
-                                    y = box_y + 60  # 40 for the input box height, 20px of spacing between input boxes
+                                    story_inputs.append(Inputs(100, y, 400, 40, prompt))
+                                    y += 100  # 40 for input box + 60 for prompt and spacing
+
                             stage = 3
                             break
+
                 elif stage == 4:
                     if play_again_button.collidepoint(event.pos):
                         stage = 1
@@ -824,12 +829,9 @@ def main(): #main function that sets up the actual stages for the game
                         story_inputs = []
                         play_again_button = create_play_again_button()
                         break
-
-            # input boxes for stage 3
             if stage == 3:
                 for box in story_inputs:
-                    box.draw_prompt_wrapped(screen, font, boxes, 400)
-                    box.draw(screen, font)
+                        box.handle_event(event)
 
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                     inputs = [box.text for box in story_inputs]
